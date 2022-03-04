@@ -1,0 +1,39 @@
+{
+    "t": "MESSAGE_CREATE",
+    "s": 3,
+    "op": 0,
+    "d": {
+        "type": 0,
+        "tts": false,
+        "timestamp": "2022-03-04T00:00:59.400000+00:00",
+        "referenced_message": null,
+        "pinned": false,
+        "nonce": "949094072423809024",
+        "mentions": [],
+        "mention_roles": [],
+        "mention_everyone": false,
+        "member": {
+            "roles": [],
+            "mute": false,
+            "joined_at": "2022-03-03T20:49:10.924000+00:00",
+            "hoisted_role": null,
+            "deaf": false
+        },
+        "id": "949094069148217394",
+        "flags": 0,
+        "embeds": [],
+        "edited_timestamp": null,
+        "content": "qeqeqe",
+        "components": [],
+        "channel_id": "949045799365525585",
+        "author": {
+            "username": "Carter",
+            "public_flags": 576,
+            "id": "152669977743196161",
+            "discriminator": "6669",
+            "avatar": "65102b17dc2bbd2dc089d41472a95b68"
+        },
+        "attachments": [],
+        "guild_id": "949045798933528617"
+    }
+}

@@ -16,10 +16,6 @@ public class Web {
         client = new OkHttpClient();
     }
 
-    public void setAuthorization(String token) {
-        this.authorizationToken = token;
-    }
-
     public String getReq(String url) {
         Request request = new Request.Builder().url(url).build();
         try (Response response = client.newCall(request).execute()) {
@@ -34,7 +30,7 @@ public class Web {
         RequestBody body = RequestBody.create(MediaType.get("application/json; charset=utf-8"), payload);
         Request request = new Request.Builder()
             .url(url)
-            .addHeader("Authorization", "Bot " + this.authorizationToken)
+            .addHeader("Authorization", "Bot " + Yoink.TOKEN)
             .addHeader("Content-Type", "application/json")
             .post(body)
             .build();
