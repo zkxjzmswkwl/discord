@@ -2,24 +2,28 @@ package gg.therealm.discord;
 
 import java.net.URI;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
+import gg.therealm.discord.packets.PacketMessage;
+
 public class WebSocket extends WebSocketClient {
     private String lastMessage;
     private int heartbeatInterval;
     private long lastHeartbeat;
     private JsonParser jsonParser;
+    private Gson gson;
     Web webClient;
 
     public WebSocket(URI serverUri) {
         super(serverUri);
         webClient = new Web();
         jsonParser = new JsonParser();
-        //TODO Auto-generated constructor stub
+        gson = new Gson();
     }
 
     @Override
@@ -37,8 +41,8 @@ public class WebSocket extends WebSocketClient {
         {
         "op": 10,
         "d": {
-            "heartbeat_interval": 45000
-        }
+                "heartbeat_interval": 45000
+            }
         }
     */
     @Override
@@ -46,31 +50,35 @@ public class WebSocket extends WebSocketClient {
         System.out.println("Websocket onMessage\t" + arg0);
         lastMessage = arg0;
         JsonObject packetBuffer = jsonParser.parse(lastMessage).getAsJsonObject();
+        int opcode = packetBuffer.get("op").getAsInt();
 
-        if (lastMessage.toLowerCase().contains("\"op\":10")) {
-            this.heartbeatInterval = Integer.parseInt(lastMessage.split("_interval\":")[1].split(",")[0].strip());
-            System.out.println("Heartbeat Interval -> " + heartbeatInterval);
-            this.send(Packet.buildIdentityPacket());
-            
-            this.lastHeartbeat = System.currentTimeMillis();
-        }
 
-        if (lastMessage.toLowerCase().contains("\"op\":0")) {
-            JsonObject bufferData = packetBuffer.get("d").getAsJsonObject();
-            if (bufferData.get("content").toString().equalsIgnoreCase("\"fuck u\"")) {
-                // Need the id of the channel the message was sent so that we can respond in the same channel.
-                String channelId = bufferData.get("channel_id").getAsString();
+        switch (opcode) {
+            case 0 -> {
+                PacketMessage messagePacket = gson.fromJson(packetBuffer.get("d"), PacketMessage.class);
+                if (messagePacket.getContent().equalsIgnoreCase("ass")) {
+                    // Build response
+                    JsonObject data = new JsonObject();
+                    data.addProperty("tts", false);
+                    data.addProperty("content", "titties\ntitties\ntitties");
+                    data.addProperty("embeds", ""); 
 
-                // Build response
-                JsonObject data = new JsonObject();
-                data.addProperty("tts", false);
-                data.addProperty("content", "No, fuck you.");
-                data.addProperty("embeds", ""); 
+                    webClient.postReq("https://discord.com/api/v9/channels/" + messagePacket.getChannelId() + "/messages", data.toString());
 
-                webClient.postReq("https://discord.com/api/v9/channels/949045799365525585/messages", data.toString());
+                }
+            break;
             }
-
-
+            
+            case 10 -> {
+                if (opcode == 10) {
+                    this.heartbeatInterval = Integer.parseInt(lastMessage.split("_interval\":")[1].split(",")[0].strip());
+                    System.out.println("Heartbeat Interval -> " + heartbeatInterval);
+                    this.send(Packet.buildIdentityPacket());
+                    
+                    this.lastHeartbeat = System.currentTimeMillis();
+                }
+            break;
+            }
         }
     }
 

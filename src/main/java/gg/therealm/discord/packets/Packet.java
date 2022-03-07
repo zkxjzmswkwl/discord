@@ -1,6 +1,13 @@
 package gg.therealm.discord.packets;
 
 public abstract class Packet {
-    public Packet() {
+    private int opcode;
+
+    public Packet(int opcode) {
+        this.opcode = opcode;
+    }
+
+    public int getOpcode() {
+        return this.opcode;
     }
 }

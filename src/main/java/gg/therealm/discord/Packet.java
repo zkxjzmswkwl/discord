@@ -3,7 +3,7 @@ package gg.therealm.discord;
 import com.google.gson.JsonObject;
 
 public abstract class Packet {
-        /*
+    /*
       https://discord.com/developers/docs/topics/gateway#identifying
     {
         "op": 2,
