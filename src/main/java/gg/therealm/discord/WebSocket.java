@@ -1,7 +1,6 @@
 package gg.therealm.discord;
 
 import java.net.URI;
-import java.util.List;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -13,11 +12,13 @@ public class WebSocket extends WebSocketClient {
     private String lastMessage;
     private int heartbeatInterval;
     private long lastHeartbeat;
+    private JsonParser jsonParser;
     Web webClient;
 
     public WebSocket(URI serverUri) {
         super(serverUri);
         webClient = new Web();
+        jsonParser = new JsonParser();
         //TODO Auto-generated constructor stub
     }
 
@@ -44,6 +45,7 @@ public class WebSocket extends WebSocketClient {
     public void onMessage(String arg0) {
         System.out.println("Websocket onMessage\t" + arg0);
         lastMessage = arg0;
+        JsonObject packetBuffer = jsonParser.parse(lastMessage).getAsJsonObject();
 
         if (lastMessage.toLowerCase().contains("\"op\":10")) {
             this.heartbeatInterval = Integer.parseInt(lastMessage.split("_interval\":")[1].split(",")[0].strip());
@@ -54,10 +56,12 @@ public class WebSocket extends WebSocketClient {
         }
 
         if (lastMessage.toLowerCase().contains("\"op\":0")) {
-            JsonObject buffer = new JsonParser().parse(lastMessage).getAsJsonObject();
-            JsonObject bufferData = (JsonObject) buffer.get("d");
+            JsonObject bufferData = packetBuffer.get("d").getAsJsonObject();
             if (bufferData.get("content").toString().equalsIgnoreCase("\"fuck u\"")) {
-                String channelId = bufferData.get("channel_id").toString();
+                // Need the id of the channel the message was sent so that we can respond in the same channel.
+                String channelId = bufferData.get("channel_id").getAsString();
+
+                // Build response
                 JsonObject data = new JsonObject();
                 data.addProperty("tts", false);
                 data.addProperty("content", "No, fuck you.");
