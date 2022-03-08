@@ -8,9 +8,6 @@ public class App
 {
     public static void main( String[] args ) throws IOException, URISyntaxException
     {
-        WebSocket ws = Yoink.gimme().theWebSocket();
-        Vroom vroom = new Vroom();
-        Thread vroomThread = new Thread(vroom);
-        vroomThread.start();
+        WebSocket ws = Yoink.gimme().theChatWebSocket();
     }
 }

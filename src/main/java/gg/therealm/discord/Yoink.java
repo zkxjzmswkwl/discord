@@ -6,14 +6,15 @@ import java.net.URISyntaxException;
 // "Globals are bad" - That's too bad.
 public class Yoink {
     public static final String PUBLIC_KEY = "e6617b9412a9dcb3edf97a9325f8e3ec3e824c70b29567df8e1fe2e03ac29601";
-    public static final String TOKEN = "";
+    public static final String TOKEN = "YOUR_TOKEN";
     public static final String BASE_AUTH_URL = "https://discord.com/api/oauth2/authorize";
     public static final String TOKEN_URL = "https://discord.com/api/oauth2/token";
     public static final String APPLICATION_ID = "949045476865507419";
     public static final String COMMAND_URL = "https://discord.com/api/v8/applications/" + APPLICATION_ID + "/commands";
 
     private static Yoink yoink;
-    private WebSocket webSocket;
+    private WebSocket chatWebSocket;
+    private WebSocket voiceWebSocket;
 
     static {
         yoink = new Yoink();
@@ -23,15 +24,15 @@ public class Yoink {
         return yoink;
     }
 
-    public WebSocket theWebSocket() {
-        if (webSocket != null) {
-            return webSocket;
+    public WebSocket theChatWebSocket() {
+        if (chatWebSocket != null) {
+            return chatWebSocket;
         }
 
         try {
-            webSocket = new WebSocket(new URI("wss://gateway.discord.gg/?v=9&encoding=json"));
-            webSocket.connect();
-            return webSocket;
+            chatWebSocket = new WebSocket(new URI("wss://gateway.discord.gg/?v=9&encoding=json"));
+            chatWebSocket.connect();
+            return chatWebSocket;
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return null;

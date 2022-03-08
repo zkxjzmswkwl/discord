@@ -41,6 +41,7 @@ public abstract class Packet {
     public static String buildHeartbeatPacket() {
         JsonObject object = new JsonObject();
         object.addProperty("op", 1);
+        object.addProperty("d", new String());
         return object.toString();
     }
 }

@@ -10,4 +10,6 @@ public abstract class Packet {
     public int getOpcode() {
         return this.opcode;
     }
+
+    public String build() { return null; };
 }

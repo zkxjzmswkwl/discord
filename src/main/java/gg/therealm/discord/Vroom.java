@@ -1,7 +1,6 @@
 package gg.therealm.discord;
 
 public class Vroom implements Runnable {
-    private long lastHeartbeat;
 
     @Override
     public void run() {
@@ -9,14 +8,15 @@ public class Vroom implements Runnable {
         for (;;)
         {
             long nowTime = System.currentTimeMillis();
+            long difference = nowTime - Yoink.gimme().theChatWebSocket().getLastHeartbeat();
 
-            if (nowTime - Yoink.gimme().theWebSocket().getLastHeartbeat() >= Yoink.gimme().theWebSocket().getHeartbeatInterval()) {
+            if (difference >= Yoink.gimme().theChatWebSocket().getHeartbeatInterval()) {
                 System.out.println("[!] Sending heartbeat packet to Discord.");
-                Yoink.gimme().theWebSocket().send(Packet.buildHeartbeatPacket());
+                Yoink.gimme().theChatWebSocket().send(Packet.buildHeartbeatPacket());
             }
 
             try {
-                Thread.sleep(25);
+                Thread.sleep(75);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
