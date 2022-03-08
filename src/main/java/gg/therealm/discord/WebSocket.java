@@ -21,7 +21,7 @@ public class WebSocket extends WebSocketClient {
     private long lastHeartbeat;
     private JsonParser jsonParser;
     private Gson gson;
-    Web webClient;
+    private Web webClient;
 
     public WebSocket(URI serverUri) {
         super(serverUri);
@@ -83,7 +83,7 @@ public class WebSocket extends WebSocketClient {
             }
             
             case 10 -> {
-                this.heartbeatInterval = Integer.parseInt(lastMessage.split("_interval\":")[1].split(",")[0].strip());
+                this.heartbeatInterval = packetBuffer.get("d").getAsJsonObject().get("heartbeat_interval").getAsInt();
                 System.out.println("Heartbeat Interval -> " + heartbeatInterval);
                 Vroom vroom = new Vroom();
                 Thread vroomThread = new Thread(vroom);

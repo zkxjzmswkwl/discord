@@ -1,10 +1,10 @@
 package gg.therealm.discord;
 
-public class Vroom implements Runnable {
+public class Heartbeat implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Vroom thread started ^_^");
+        System.out.println("Heartbeat Thread Started");
         for (;;)
         {
             long nowTime = System.currentTimeMillis();
